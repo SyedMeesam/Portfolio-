@@ -31,6 +31,40 @@ export function mountReactBits() {
       </Magnet>
     );
   }
+  // Disable the decorative cursor for people who prefer reduced motion.
+  const splashHost = document.querySelector('#splash-cursor-root');
+  if (splashHost) {
+    const root = createRoot(splashHost);
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let request = 0;
+    const updateSplash = async () => {
+      const current = ++request;
+      if (motion.matches) {
+        root.render(null);
+        return;
+      }
+      try {
+        const { default: SplashCursor } = await import('./src/reactbits/SplashCursor.jsx');
+        if (current !== request || motion.matches) return;
+        root.render(
+          <SplashCursor
+            rainbow={false}
+            size={1}
+            force={1}
+            swirl={3}
+            trail={1}
+            clickSplash
+            colors={['#ffffff', '#3b82f6', '#06b6d4']}
+            quality="medium"
+          />
+        );
+      } catch (error) {
+        console.warn('SplashCursor enhancement unavailable.', error);
+      }
+    };
+    motion.addEventListener('change', updateSplash);
+    updateSplash();
+  }
   // Load the WebGL background only as the contact section approaches the viewport.
   const asciiHost = document.querySelector('#contact-ascii');
   if (asciiHost) {
