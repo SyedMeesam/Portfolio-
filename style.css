@@ -39,3 +39,9 @@
 @media(max-width:800px){.magnet-header{display:none}}
 @media(prefers-reduced-motion:reduce){#gradient-headline .gradient-text__content{background:none;-webkit-text-fill-color:currentColor;color:#8EF0F5}}
 .about-facts strong span,.project-stat strong span{font-size:inherit;line-height:inherit;letter-spacing:inherit;color:inherit}
+
+/* GradientASCII is decorative; content and links remain above it. */
+.contact{position:relative;overflow:hidden;isolation:isolate}
+.contact-ascii{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.4;background:radial-gradient(ellipse at 50% 70%,rgba(11,106,187,.35),transparent 65%)}
+.contact>.section-head,.contact>.contact-content,.contact>footer{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.contact-ascii{opacity:.25}}
