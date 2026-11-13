@@ -10,3 +10,14 @@
 @media(max-width:800px){.hero{min-height:auto}.hero-layout{grid-template-columns:1fr 0.8fr;gap:0;padding:60px 0}.hero h1{font-size:clamp(48px,7.5vw,72px)}.hero-intro{margin-top:35px}.hero-art{width:100%}.hero-stamp{width:72px;height:72px}.hero-stamp span{font-size:20px}.hero-stamp small{font-size:7px}}
 @media(max-width:600px){.hero-layout{display:flex;flex-direction:column;align-items:stretch;padding:55px 0 35px}.hero h1{font-size:clamp(46px,10vw,67px)}.hero-eyebrow{margin-bottom:26px}.hero-eyebrow span:last-child{display:block}.hero-intro{display:block;margin-top:30px}.hero-intro p{margin:15px 0 20px}.hero-art{width:86%;max-width:370px;margin:35px auto 10px;justify-self:auto}.hero-footer{font-size:8px}.hero-footer>span:first-child{display:none}}
 @media(prefers-reduced-motion:reduce){.hero-intro,.hero-art,.hero-image-frame,.hero-image-frame img,.hero-stamp{animation:none;opacity:1;transform:none}.hero-orbit,.hero-footer a span{animation:none}}
+
+/* Center the portrait in the hero, framed by the introduction. */
+.hero-layout{grid-template-columns:minmax(0,1fr) minmax(280px,1.15fr) minmax(0,.7fr);gap:2.5%;padding:55px 0;align-items:center}
+.hero-copy{min-width:0}.hero-eyebrow{gap:12px}.hero-eyebrow span:last-child{display:none}
+.hero h1{font-size:clamp(35px,4.05vw,65px);line-height:.95;letter-spacing:-.07em}
+.hero-art{justify-self:center;max-width:440px}
+.hero-intro{max-width:250px;margin:0;justify-self:end}
+.hero-image-frame:after{display:none}
+.hero-image-frame img{filter:none;object-position:center center}
+@media(max-width:800px){.hero-layout{grid-template-columns:minmax(0,1fr) minmax(220px,1.1fr);gap:4%;padding:55px 0}.hero h1{font-size:clamp(36px,5.4vw,55px)}.hero-intro{grid-column:1/-1;justify-self:start;margin:30px 0 0;max-width:400px}}
+@media(max-width:600px){.hero-layout{display:flex;flex-direction:column;align-items:stretch;padding:48px 0 35px}.hero h1{font-size:clamp(44px,10vw,64px)}.hero-art{width:86%;max-width:370px;margin:35px auto 10px}.hero-intro{margin:28px 0 0;max-width:400px}}
