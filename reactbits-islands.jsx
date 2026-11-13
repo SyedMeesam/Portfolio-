@@ -17,7 +17,7 @@ export function mountReactBits() {
   if (header) {
     createRoot(header).render(
       <Magnet padding={55} magnetStrength={6} maxOffset={12}>
-        <a className="header-cta" href="#contact">LET'S TALK <span>↗</span></a>
+        <a className="header-cta" href="https://calendly.com/syedmeesam/meeting" target="_blank" rel="noopener noreferrer">FREE MEETING CONSULTATION <span>↗</span></a>
       </Magnet>
     );
   }
@@ -25,8 +25,8 @@ export function mountReactBits() {
   if (contact) {
     createRoot(contact).render(
       <Magnet padding={70} magnetStrength={6} maxOffset={14}>
-        <a href="https://www.linkedin.com/in/meesam-ai-seo-expert/" target="_blank" rel="noopener noreferrer" className="contact-button">
-          LET'S CONNECT ON LINKEDIN <span>↗</span>
+        <a href="https://calendly.com/syedmeesam/meeting" target="_blank" rel="noopener noreferrer" className="contact-button">
+          FREE MEETING CONSULTATION <span>↗</span>
         </a>
       </Magnet>
     );
