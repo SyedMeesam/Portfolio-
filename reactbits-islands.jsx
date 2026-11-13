@@ -31,6 +31,41 @@ export function mountReactBits() {
       </Magnet>
     );
   }
+  // Load the WebGL background only as the contact section approaches the viewport.
+  const asciiHost = document.querySelector('#contact-ascii');
+  if (asciiHost) {
+    const loadAscii = async () => {
+      try {
+        const { default: GradientASCII } = await import('./src/reactbits/GradientASCII.jsx');
+        createRoot(asciiHost).render(
+          <GradientASCII
+            colors={['#0A2540', '#0B6ABB', '#139DFF', '#8EF0F5']}
+            shape="horizon"
+            characters=" =+xX0S8#@"
+            cellSize={18}
+            density={0.8}
+            speed={0.55}
+            glow={0.2}
+            dpr={1.25}
+          />
+        );
+      } catch (error) {
+        // The CSS background and contact content remain usable without WebGL.
+        console.warn('GradientASCII background unavailable.', error);
+      }
+    };
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          observer.disconnect();
+          loadAscii();
+        }
+      }, { rootMargin: '300px' });
+      observer.observe(asciiHost);
+    } else {
+      loadAscii();
+    }
+  }
   document.querySelectorAll('.count-up').forEach(element => {
     createRoot(element).render(
       <CountUp to={Number(element.dataset.to)} prefix={element.dataset.prefix || ''} suffix={element.dataset.suffix || ''} duration={1.8} />
