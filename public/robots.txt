@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Case-study images and links point at Mark X Media's public portfolio.
+Sitemap: https://syedmeesam.github.io/Portfolio-/sitemap.xml
