@@ -7,7 +7,7 @@ export function mountReactBits() {
   const headline = document.querySelector('#gradient-headline');
   if (headline) {
     createRoot(headline).render(
-      <GradientText colors={['#A7F3D0', '#FFFFFF', '#34D399', '#7FE7D0']} animationSpeed={7}>
+      <GradientText colors={['#97f8f4', '#FFFFFF', '#119cff', '#97f8f4']} animationSpeed={7}>
         UNMISSABLE
       </GradientText>
     );
@@ -35,10 +35,10 @@ export function mountReactBits() {
   // gradient underneath, so the design holds up without WebGL2. Sections that
   // are far down the page only mount their shader as they come into view.
   const BACKDROPS = [
-    ['#hero-grainient', { colors: ['#071318', '#0E7490', '#2DD4BF', '#CCFBF1'], angle: 20, flow: 0.9, silk: 0.35, grainAmount: 0.08 }],
-    ['#impact-grainient', { colors: ['#071318', '#0F766E', '#34D399', '#CCFBF1'], angle: 300, flow: 0.8, silk: 0.3, grainAmount: 0.05, speed: 0.6 }],
-    ['#experience-grainient', { colors: ['#071318', '#115E59', '#2DD4BF', '#CCFBF1'], angle: 220, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.5 }],
-    ['#contact-grainient', { colors: ['#050F13', '#0E7490', '#34D399', '#CCFBF1'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.55 }]
+    ['#hero-grainient', { colors: ['#97f8f4', '#97f8f4', '#119cff', '#119cff', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08 }],
+    ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#97f8f4', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.6 }],
+    ['#experience-grainient', { colors: ['#97f8f4', '#119cff', '#0a66c2', '#119cff', '#97f8f4'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.5 }],
+    ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#97f8f4', '#119cff'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.55 }]
   ];
   const mountBackdrop = async ([selector, props]) => {
     const host = document.querySelector(selector);
@@ -74,7 +74,7 @@ export function mountReactBits() {
         const { default: GradientASCII } = await import('./src/reactbits/GradientASCII.jsx');
         createRoot(asciiHost).render(
           <GradientASCII
-            colors={['#061A1F', '#0E7490', '#2DD4BF', '#A7F3D0']}
+            colors={['#0a66c2', '#119cff', '#97f8f4', '#119cff']}
             shape="horizon"
             characters=" =+xX0S8#@"
             cellSize={18}
