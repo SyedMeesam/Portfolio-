@@ -7,7 +7,7 @@ export function mountReactBits() {
   const headline = document.querySelector('#gradient-headline');
   if (headline) {
     createRoot(headline).render(
-      <GradientText colors={['#8EF0F5', '#FFFFFF', '#139DFF', '#8EF0F5']} animationSpeed={7}>
+      <GradientText colors={['#A7F3D0', '#FFFFFF', '#34D399', '#7FE7D0']} animationSpeed={7}>
         UNMISSABLE
       </GradientText>
     );
@@ -31,40 +31,41 @@ export function mountReactBits() {
       </Magnet>
     );
   }
-  // Disable the decorative cursor for people who prefer reduced motion.
-  const splashHost = document.querySelector('#splash-cursor-root');
-  if (splashHost) {
-    const root = createRoot(splashHost);
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let request = 0;
-    const updateSplash = async () => {
-      const current = ++request;
-      if (motion.matches) {
-        root.render(null);
-        return;
-      }
-      try {
-        const { default: SplashCursor } = await import('./src/reactbits/SplashCursor.jsx');
-        if (current !== request || motion.matches) return;
-        root.render(
-          <SplashCursor
-            rainbow={false}
-            size={1}
-            force={1}
-            swirl={3}
-            trail={1}
-            clickSplash
-            colors={['#ffffff', '#3b82f6', '#06b6d4']}
-            quality="medium"
-          />
-        );
-      } catch (error) {
-        console.warn('SplashCursor enhancement unavailable.', error);
-      }
-    };
-    motion.addEventListener('change', updateSplash);
-    updateSplash();
-  }
+  // Grainient shader backdrops, one per section. Each host keeps a layered CSS
+  // gradient underneath, so the design holds up without WebGL2. Sections that
+  // are far down the page only mount their shader as they come into view.
+  const BACKDROPS = [
+    ['#hero-grainient', { colors: ['#071318', '#0E7490', '#2DD4BF', '#CCFBF1'], angle: 20, flow: 0.9, silk: 0.35, grainAmount: 0.08 }],
+    ['#impact-grainient', { colors: ['#071318', '#0F766E', '#34D399', '#CCFBF1'], angle: 300, flow: 0.8, silk: 0.3, grainAmount: 0.05, speed: 0.6 }],
+    ['#experience-grainient', { colors: ['#071318', '#115E59', '#2DD4BF', '#CCFBF1'], angle: 220, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.5 }],
+    ['#contact-grainient', { colors: ['#050F13', '#0E7490', '#34D399', '#CCFBF1'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.55 }]
+  ];
+  const mountBackdrop = async ([selector, props]) => {
+    const host = document.querySelector(selector);
+    if (!host) return;
+    try {
+      const { default: Grainient } = await import('./src/reactbits/Grainient.jsx');
+      createRoot(host).render(
+        <Grainient {...props} style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }} />
+      );
+    } catch (error) {
+      // The static CSS gradient remains visible.
+      console.warn('Grainient backdrop unavailable.', error);
+    }
+  };
+  BACKDROPS.forEach((backdrop, index) => {
+    const host = document.querySelector(backdrop[0]);
+    if (!host) return;
+    // The hero paints immediately; the rest wait until they are near the fold.
+    if (index === 0 || !('IntersectionObserver' in window)) return void mountBackdrop(backdrop);
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      mountBackdrop(backdrop);
+    }, { rootMargin: '250px' });
+    observer.observe(host);
+  });
+
   // Load the WebGL background only as the contact section approaches the viewport.
   const asciiHost = document.querySelector('#contact-ascii');
   if (asciiHost) {
@@ -73,7 +74,7 @@ export function mountReactBits() {
         const { default: GradientASCII } = await import('./src/reactbits/GradientASCII.jsx');
         createRoot(asciiHost).render(
           <GradientASCII
-            colors={['#0A2540', '#0B6ABB', '#139DFF', '#8EF0F5']}
+            colors={['#061A1F', '#0E7490', '#2DD4BF', '#A7F3D0']}
             shape="horizon"
             characters=" =+xX0S8#@"
             cellSize={18}

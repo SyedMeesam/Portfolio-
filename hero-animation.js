@@ -5,7 +5,7 @@ export function createHeroAnimation(hero, canvas) {
   if (!hero || !canvas) return;
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-  renderer.setClearColor(0x0a2540, 0);
+  renderer.setClearColor(0x071318, 0);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
   camera.position.z = 9;
@@ -13,8 +13,9 @@ export function createHeroAnimation(hero, canvas) {
   scene.add(group);
 
   // Two elliptical wireframe rings give the hero a dimensional, orbital motion.
+  // Palette: deep teal / green only — no blue.
   const ringGeometry = new THREE.TorusGeometry(2.9, 0.008, 5, 160);
-  const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x139dff, transparent: true, opacity: 0.45 });
+  const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.42 });
   const ringA = new THREE.Mesh(ringGeometry, ringMaterial);
   const ringB = new THREE.Mesh(ringGeometry, ringMaterial);
   ringA.rotation.set(0.85, 0.25, 0.4);
@@ -32,7 +33,7 @@ export function createHeroAnimation(hero, canvas) {
   }
   const particlesGeometry = new THREE.BufferGeometry();
   particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particlesMaterial = new THREE.PointsMaterial({ color: 0x8ef0f5, size: 0.035, transparent: true, opacity: 0.65, depthWrite: false });
+  const particlesMaterial = new THREE.PointsMaterial({ color: 0xccfbf1, size: 0.035, transparent: true, opacity: 0.65, depthWrite: false });
   const particles = new THREE.Points(particlesGeometry, particlesMaterial);
   group.add(particles);
 

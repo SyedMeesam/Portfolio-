@@ -2,8 +2,9 @@
 
 Personal site for Meesam Kazmi, digital growth strategist and CMO at Mark X Media.
 A single-page portfolio built with plain HTML, CSS and ES modules, enhanced by
-React Bits islands (GradientText, Magnet, CountUp, SplashCursor, GradientASCII)
-and a Three.js hero scene.
+React Bits islands (Grainient backdrops, GradientText, Magnet, CountUp,
+GradientASCII), interface sound from React Bits' Sound Lab, and a Three.js hero
+scene. The palette is deep teal and mint — deliberately no blue.
 
 Live: https://syedmeesam.github.io/Portfolio-/
 
@@ -25,7 +26,8 @@ npm run preview  # serve the production build
 | `script.js` | Menu, reveal-on-scroll, gallery filtering, progressive enhancement |
 | `hero-animation.js` | Three.js hero, loaded only when motion is welcome |
 | `reactbits-islands.jsx` | Mounts the React Bits components onto existing markup |
-| `src/reactbits/` | Vendored React Bits components (MIT, see `NOTICE.md`) |
+| `src/reactbits/` | Vendored React Bits components (see `NOTICE.md`) |
+| `src/sound/` | Sound Lab engine + one recipe per interaction |
 | `public/` | Images, favicon, `robots.txt`, `sitemap.xml` |
 | `src/fonts/` | Self-hosted woff2 fonts |
 
@@ -40,6 +42,14 @@ npm run preview  # serve the production build
   Mark X Media portfolio with an inline fallback if a file 404s.
 - **Fonts are self-hosted** in `src/fonts` (woff2, latin subset; hashed by Vite) so the site
   makes no third-party font requests and text does not reflow.
+- **Grainient backdrops.** The hero, impact, experience and contact sections
+  each mount a `Grainient` WebGL2 shader. Every host keeps a layered CSS
+  gradient underneath as the no-WebGL fallback, and sections below the fold only
+  mount their shader when they approach the viewport.
+- **Interface sound is opt-in.** Recipes from the React Bits Sound Lab are
+  synthesised in the browser (no audio files). Nothing plays until the header
+  switch is turned on; the choice is stored in `localStorage` and the switch
+  reports state through `aria-pressed`.
 - **Brand tokens.** Navy `#0A2540`, cyan `#8EF0F5`, blue `#139DFF`, white.
 
 ## Deployment
