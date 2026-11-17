@@ -120,3 +120,12 @@ document.querySelectorAll('.case-image img').forEach(image => {
   image.addEventListener('error', showFallback);
   if (image.complete && image.naturalWidth === 0) showFallback();
 });
+
+// Interface sound (React Bits Sound Lab recipes). Loaded on idle so it never
+// competes with the hero, and silent until the header switch is turned on.
+const idle = window.requestIdleCallback || (fn => setTimeout(fn, 1800));
+idle(() => {
+  import('./src/sound/sound.js')
+    .then(({ initSound }) => initSound())
+    .catch(error => console.warn('Interface sound unavailable.', error));
+});
