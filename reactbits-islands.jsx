@@ -1,7 +1,34 @@
 import { createRoot } from 'react-dom/client';
+import { createRef } from 'react';
 import GradientText from './src/reactbits/GradientText.jsx';
 import Magnet from './src/reactbits/Magnet.jsx';
 import CountUp from './src/reactbits/CountUp.jsx';
+import ClickSpark from './src/reactbits/ClickSpark.jsx';
+import ShinyText from './src/reactbits/ShinyText.jsx';
+import StarBorder from './src/reactbits/StarBorder.jsx';
+import SpotlightCard from './src/reactbits/SpotlightCard.jsx';
+
+// Renders the ReactBits spotlight shell and adopts the already-existing <article>
+// so no card markup is duplicated or re-created by React.
+function CaseSpotlight({ card }) {
+  const slot = node => {
+    if (node && card && card.parentNode !== node) node.appendChild(card);
+  };
+  return (
+    <SpotlightCard
+      spotlightColor="#97f8f4"
+      intensity={0.11}
+      spotlightSize={260}
+      borderGlow={0.16}
+      proximity={90}
+      smoothing={0.22}
+      flare={false}
+      className="case-card-wrap"
+    >
+      <div ref={slot} className="case-card-slot" />
+    </SpotlightCard>
+  );
+}
 
 export function mountReactBits() {
   const headline = document.querySelector('#gradient-headline');
@@ -17,8 +44,57 @@ export function mountReactBits() {
   if (header) {
     createRoot(header).render(
       <Magnet padding={55} magnetStrength={6} maxOffset={12}>
-        <a className="header-cta" href="https://calendly.com/syedmeesam/meeting" target="_blank" rel="noopener noreferrer">FREE MEETING CONSULTATION <span>↗</span></a>
+        <StarBorder
+          as="a"
+          href="https://calendly.com/syedmeesam/meeting"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="header-cta star-border-cta"
+          color="#97f8f4"
+          trailColor="#FFFFFF"
+          backgroundColor="rgba(10,102,194,0)"
+          textColor="#FFFFFF"
+          borderColor="rgba(151,248,244,.55)"
+          radius={50}
+          thickness={1}
+          duration={6}
+          trailLength={0.28}
+          glow={0.4}
+          hover="lap"
+        >
+          FREE MEETING CONSULTATION <span>↗</span>
+        </StarBorder>
       </Magnet>
+    );
+  }
+
+  // A soft aqua spark on every click. The layer is a click-through overlay, so the
+  // burst is driven from a document listener instead of the layer's own hit area.
+  const sparkRoot = document.querySelector('#click-spark-root');
+  if (sparkRoot && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches !== true) {
+    const sparkRef = createRef();
+    createRoot(sparkRoot).render(
+      <ClickSpark
+        ref={sparkRef}
+        sparkColor="#97f8f4"
+        sparkCount={9}
+        sparkSize={13}
+        sparkRadius={32}
+        sparkWidth={2}
+        duration={520}
+        glow={0.35}
+      />
+    );
+    window.addEventListener('pointerdown', event => {
+      sparkRef.current?.spark(event.clientX, event.clientY);
+    }, { passive: true });
+  }
+
+  // The section kickers get a slow travelling highlight, in palette colours.
+  const shinyKicker = document.querySelector('.hero-eyebrow span:first-child');
+  if (shinyKicker) {
+    createRoot(shinyKicker).render(
+      <ShinyText text={shinyKicker.textContent.trim()} color="#97f8f4" shineColor="#FFFFFF" speed={2.4} spread={120} shineWidth={24} direction="left" />
     );
   }
   const contact = document.querySelector('#magnet-contact');
@@ -34,8 +110,10 @@ export function mountReactBits() {
   // Grainient shader backdrops, one per section. Each host keeps a layered CSS
   // gradient underneath, so the design holds up without WebGL2. Sections that
   // are far down the page only mount their shader as they come into view.
+  const HERO_BACKDROP = { colors: ['#97f8f4', '#97f8f4', '#119cff', '#119cff', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08 };
   const BACKDROPS = [
-    ['#hero-grainient', { colors: ['#97f8f4', '#97f8f4', '#119cff', '#119cff', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08 }],
+    ['#header-grainient', HERO_BACKDROP],
+    ['#hero-grainient', HERO_BACKDROP],
     ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#97f8f4', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.6 }],
     ['#experience-grainient', { colors: ['#97f8f4', '#119cff', '#0a66c2', '#119cff', '#97f8f4'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.5 }],
     ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#97f8f4', '#119cff'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.55 }]
@@ -101,6 +179,17 @@ export function mountReactBits() {
       loadAscii();
     }
   }
+  // A cursor-following aqua spotlight on the case-study cards. Each card is moved
+  // into a decorative SpotlightCard shell; the <article> and its links stay as-is.
+  document.querySelectorAll('.case-grid .case-card').forEach(card => {
+    const host = document.createElement('div');
+    host.className = 'case-card-spotlight';
+    // Insert the empty shell first; the ref callback then moves the real <article>
+    // inside it, after React has finished mounting into the shell.
+    card.parentNode.insertBefore(host, card);
+    createRoot(host).render(<CaseSpotlight card={card} />);
+  });
+
   document.querySelectorAll('.count-up').forEach(element => {
     createRoot(element).render(
       <CountUp to={Number(element.dataset.to)} prefix={element.dataset.prefix || ''} suffix={element.dataset.suffix || ''} duration={1.8} />
