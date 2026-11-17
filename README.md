@@ -4,7 +4,7 @@ Personal site for Meesam Kazmi, digital growth strategist and CMO at Mark X Medi
 A single-page portfolio built with plain HTML, CSS and ES modules, enhanced by
 React Bits islands (Grainient backdrops, GradientText, Magnet, CountUp,
 GradientASCII), interface sound from React Bits' Sound Lab, and a Three.js hero
-scene. The palette is deep teal and mint — deliberately no blue.
+scene.
 
 Live: https://syedmeesam.github.io/Portfolio-/
 
@@ -43,14 +43,20 @@ npm run preview  # serve the production build
 - **Fonts are self-hosted** in `src/fonts` (woff2, latin subset; hashed by Vite) so the site
   makes no third-party font requests and text does not reflow.
 - **Grainient backdrops.** The hero, impact, experience and contact sections
-  each mount a `Grainient` WebGL2 shader. Every host keeps a layered CSS
+  each mount a `Grainient` WebGL2 shader (`#97f8f4 → #119cff → #0a66c2`,
+  re-angled per section). Every host keeps a layered CSS
   gradient underneath as the no-WebGL fallback, and sections below the fold only
   mount their shader when they approach the viewport.
 - **Interface sound is opt-in.** Recipes from the React Bits Sound Lab are
   synthesised in the browser (no audio files). Nothing plays until the header
   switch is turned on; the choice is stored in `localStorage` and the switch
   reports state through `aria-pressed`.
-- **Brand tokens.** Navy `#0A2540`, cyan `#8EF0F5`, blue `#139DFF`, white.
+- **Brand tokens — four colours, nothing else.** Cobalt `#0a66c2`, sky
+  `#119cff`, aqua `#97f8f4`, white. Cobalt is the only dark in the palette, so
+  it carries all body text and every dark section. `#119cff` is too light for
+  small type on any background (1.96–2.91:1), so it stays an accent: borders,
+  decorative marks, and oversized display type. Verified with a WCAG audit of
+  every pairing the stylesheet sets.
 
 ## Deployment
 
