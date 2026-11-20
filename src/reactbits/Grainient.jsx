@@ -264,7 +264,7 @@ const Grainient = ({
   silk = 0.35,
   grainAmount = 0.08,
   grainSize = 1.2,
-  grainAnimated = true,
+  grainAnimated = false,
   contrast = 1,
   saturation = 1,
   variation = 0,
@@ -433,10 +433,11 @@ const Grainient = ({
     };
 
     const resize = () => {
+      box = null;
       const s = settingsRef.current;
       view.width = Math.max(1, container.clientWidth);
       view.height = Math.max(1, container.clientHeight);
-      view.ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      view.ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.max(1, Math.round(view.width * view.ratio));
       canvas.height = Math.max(1, Math.round(view.height * view.ratio));
       const width = Math.max(1, Math.round(canvas.width / 2));
@@ -536,8 +537,16 @@ const Grainient = ({
       if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
     }
 
+    // The container's box only changes on resize/scroll, so measure it lazily and
+    // invalidate on resize rather than forcing a layout read on every pointermove.
+    let box = null;
+    const layout = () => {
+      box = { rect: container.getBoundingClientRect(), width: view.width, height: view.height };
+      return box;
+    };
+    const boxReset = () => { box = null; };
     const locate = event => {
-      const rect = container.getBoundingClientRect();
+      const rect = (box ?? layout()).rect;
       const x = (event.clientX - rect.left) / Math.max(1, rect.width);
       const y = 1 - (event.clientY - rect.top) / Math.max(1, rect.height);
       pointer.inside = x >= 0 && x <= 1 && y >= 0 && y <= 1;
@@ -592,6 +601,7 @@ const Grainient = ({
     window.addEventListener('pointerdown', onPointerDown, { passive: true });
     document.documentElement.addEventListener('pointerleave', onPointerLeave);
     document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('scroll', boxReset, { passive: true });
     resize();
     wakeRef.current = wake;
 
@@ -604,6 +614,7 @@ const Grainient = ({
       window.removeEventListener('pointerdown', onPointerDown);
       document.documentElement.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('scroll', boxReset);
       gl.deleteTexture(target);
       gl.deleteFramebuffer(buffer);
       gl.deleteVertexArray(vao);

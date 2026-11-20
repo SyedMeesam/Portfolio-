@@ -7,6 +7,7 @@ import ClickSpark from './src/reactbits/ClickSpark.jsx';
 import ShinyText from './src/reactbits/ShinyText.jsx';
 import StarBorder from './src/reactbits/StarBorder.jsx';
 import SpotlightCard from './src/reactbits/SpotlightCard.jsx';
+import BlurText from './src/reactbits/BlurText.jsx';
 
 // Renders the ReactBits spotlight shell and adopts the already-existing <article>
 // so no card markup is duplicated or re-created by React.
@@ -110,13 +111,17 @@ export function mountReactBits() {
   // Grainient shader backdrops, one per section. Each host keeps a layered CSS
   // gradient underneath, so the design holds up without WebGL2. Sections that
   // are far down the page only mount their shader as they come into view.
-  const HERO_BACKDROP = { colors: ['#97f8f4', '#97f8f4', '#119cff', '#119cff', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08 };
+  const HERO_BACKDROP = { colors: ['#97f8f4', '#97f8f4', '#119cff', '#119cff', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08, speed: 0.3 };
+  // Every host here is a live WebGL canvas, but only the ones in view actually
+  // paint: Grainient stops its loop when it leaves the viewport or the tab is
+  // hidden. The speeds are deliberately slow - a fast-moving field behind body
+  // copy reads as jitter while scrolling, not as polish.
   const BACKDROPS = [
     ['#header-grainient', HERO_BACKDROP],
     ['#hero-grainient', HERO_BACKDROP],
-    ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#97f8f4', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.6 }],
-    ['#experience-grainient', { colors: ['#97f8f4', '#119cff', '#0a66c2', '#119cff', '#97f8f4'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.5 }],
-    ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#97f8f4', '#119cff'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.55 }]
+    ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#97f8f4', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.28 }],
+    ['#experience-grainient', { colors: ['#97f8f4', '#119cff', '#0a66c2', '#119cff', '#97f8f4'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.22 }],
+    ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#97f8f4', '#119cff'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.26 }]
   ];
   const mountBackdrop = async ([selector, props]) => {
     const host = document.querySelector(selector);
@@ -179,6 +184,33 @@ export function mountReactBits() {
       loadAscii();
     }
   }
+  // Section headlines resolve word by word as they scroll in. The original <h2>
+  // stays in the document for search engines and assistive tech; the animated
+  // copy is an aria-hidden sibling that replaces it visually.
+  document.querySelectorAll('h2[data-blur]').forEach(heading => {
+    const text = heading.dataset.blur;
+    if (!text) return;
+    const shell = document.createElement('span');
+    shell.className = 'reveal-words-shell';
+    shell.setAttribute('aria-hidden', 'true');
+    heading.parentNode.insertBefore(shell, heading.nextSibling);
+    heading.classList.add('reveal-words-source');
+    createRoot(shell).render(
+      <BlurText
+        text={text}
+        animateBy="words"
+        direction="top"
+        effect="blur"
+        blur={9}
+        distance={26}
+        stepDuration={0.42}
+        delay={55}
+        easing="easeOut"
+        className="reveal-words-text"
+      />
+    );
+  });
+
   // A cursor-following aqua spotlight on the case-study cards. Each card is moved
   // into a decorative SpotlightCard shell; the <article> and its links stay as-is.
   document.querySelectorAll('.case-grid .case-card').forEach(card => {
@@ -190,9 +222,34 @@ export function mountReactBits() {
     createRoot(host).render(<CaseSpotlight card={card} />);
   });
 
-  document.querySelectorAll('.count-up').forEach(element => {
+  // Counters animate the real figures already in the markup. They are mounted only
+  // once the figure is close to the viewport, and the original text stays in the
+  // DOM until then, so a number is never missing or stuck at zero.
+  const mountCounters = element => {
+    if (element.dataset.counted) return;
+    element.dataset.counted = 'true';
+    const { to, prefix = '', suffix = '', decimals } = element.dataset;
+    if (!to) return;
     createRoot(element).render(
-      <CountUp to={Number(element.dataset.to)} prefix={element.dataset.prefix || ''} suffix={element.dataset.suffix || ''} duration={1.8} />
+      <CountUp
+        to={Number(to)}
+        from={0}
+        prefix={prefix}
+        suffix={suffix}
+        decimals={decimals === undefined ? undefined : Number(decimals)}
+        duration={1.8}
+        trigger="load"
+      />
     );
+  };
+  const counters = document.querySelectorAll('.count-up, .impact-figure');
+  counters.forEach(element => {
+    if (!('IntersectionObserver' in window)) return void mountCounters(element);
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      mountCounters(element);
+    }, { rootMargin: '150px' });
+    observer.observe(element);
   });
 }
