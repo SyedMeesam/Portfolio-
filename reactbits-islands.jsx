@@ -190,9 +190,34 @@ export function mountReactBits() {
     createRoot(host).render(<CaseSpotlight card={card} />);
   });
 
-  document.querySelectorAll('.count-up').forEach(element => {
+  // Counters animate the real figures already in the markup. They are mounted only
+  // once the figure is close to the viewport, and the original text stays in the
+  // DOM until then, so a number is never missing or stuck at zero.
+  const mountCounters = element => {
+    if (element.dataset.counted) return;
+    element.dataset.counted = 'true';
+    const { to, prefix = '', suffix = '', decimals } = element.dataset;
+    if (!to) return;
     createRoot(element).render(
-      <CountUp to={Number(element.dataset.to)} prefix={element.dataset.prefix || ''} suffix={element.dataset.suffix || ''} duration={1.8} />
+      <CountUp
+        to={Number(to)}
+        from={0}
+        prefix={prefix}
+        suffix={suffix}
+        decimals={decimals === undefined ? undefined : Number(decimals)}
+        duration={1.8}
+        trigger="load"
+      />
     );
+  };
+  const counters = document.querySelectorAll('.count-up, .impact-figure');
+  counters.forEach(element => {
+    if (!('IntersectionObserver' in window)) return void mountCounters(element);
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      mountCounters(element);
+    }, { rootMargin: '150px' });
+    observer.observe(element);
   });
 }
