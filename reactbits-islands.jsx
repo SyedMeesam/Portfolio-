@@ -17,7 +17,7 @@ function CaseSpotlight({ card }) {
   };
   return (
     <SpotlightCard
-      spotlightColor="#97f8f4"
+      spotlightColor="#FFE873"
       intensity={0.11}
       spotlightSize={260}
       borderGlow={0.16}
@@ -35,7 +35,7 @@ export function mountReactBits() {
   const headline = document.querySelector('#gradient-headline');
   if (headline) {
     createRoot(headline).render(
-      <GradientText colors={['#97f8f4', '#FFFFFF', '#119cff', '#97f8f4']} animationSpeed={7}>
+      <GradientText colors={['#FFE873', '#FFFFFF', '#119cff', '#FFE873']} animationSpeed={7}>
         UNMISSABLE
       </GradientText>
     );
@@ -51,11 +51,11 @@ export function mountReactBits() {
           target="_blank"
           rel="noopener noreferrer"
           className="header-cta star-border-cta"
-          color="#97f8f4"
+          color="#FFE873"
           trailColor="#FFFFFF"
           backgroundColor="rgba(10,102,194,0)"
           textColor="#FFFFFF"
-          borderColor="rgba(151,248,244,.55)"
+          borderColor="rgba(255,232,115,.55)"
           radius={50}
           thickness={1}
           duration={6}
@@ -77,7 +77,7 @@ export function mountReactBits() {
     createRoot(sparkRoot).render(
       <ClickSpark
         ref={sparkRef}
-        sparkColor="#97f8f4"
+        sparkColor="#FFE873"
         sparkCount={9}
         sparkSize={13}
         sparkRadius={32}
@@ -95,7 +95,7 @@ export function mountReactBits() {
   const shinyKicker = document.querySelector('.hero-eyebrow span:first-child');
   if (shinyKicker) {
     createRoot(shinyKicker).render(
-      <ShinyText text={shinyKicker.textContent.trim()} color="#97f8f4" shineColor="#FFFFFF" speed={2.4} spread={120} shineWidth={24} direction="left" />
+      <ShinyText text={shinyKicker.textContent.trim()} color="#FFE873" shineColor="#FFFFFF" speed={2.4} spread={120} shineWidth={24} direction="left" />
     );
   }
   const contact = document.querySelector('#magnet-contact');
@@ -111,7 +111,7 @@ export function mountReactBits() {
   // Grainient shader backdrops, one per section. Each host keeps a layered CSS
   // gradient underneath, so the design holds up without WebGL2. Sections that
   // are far down the page only mount their shader as they come into view.
-  const HERO_BACKDROP = { colors: ['#97f8f4', '#97f8f4', '#119cff', '#119cff', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08, speed: 0.3 };
+  const HERO_BACKDROP = { colors: ['#119cff', '#119cff', '#0a66c2', '#0a66c2', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08, speed: 0.3 };
   // Every host here is a live WebGL canvas, but only the ones in view actually
   // paint: Grainient stops its loop when it leaves the viewport or the tab is
   // hidden. The speeds are deliberately slow - a fast-moving field behind body
@@ -119,9 +119,9 @@ export function mountReactBits() {
   const BACKDROPS = [
     ['#header-grainient', HERO_BACKDROP],
     ['#hero-grainient', HERO_BACKDROP],
-    ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#97f8f4', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.28 }],
-    ['#experience-grainient', { colors: ['#97f8f4', '#119cff', '#0a66c2', '#119cff', '#97f8f4'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.22 }],
-    ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#97f8f4', '#119cff'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.26 }]
+    ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.28 }],
+    ['#experience-grainient', { colors: ['#119cff', '#119cff', '#0a66c2', '#119cff', '#119cff'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.22 }],
+    ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#119cff', '#0a66c2'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.26 }]
   ];
   const mountBackdrop = async ([selector, props]) => {
     const host = document.querySelector(selector);
@@ -157,7 +157,7 @@ export function mountReactBits() {
         const { default: GradientASCII } = await import('./src/reactbits/GradientASCII.jsx');
         createRoot(asciiHost).render(
           <GradientASCII
-            colors={['#0a66c2', '#119cff', '#97f8f4', '#119cff']}
+            colors={['#0a66c2', '#119cff', '#FFFFFF', '#119cff']}
             shape="horizon"
             characters=" =+xX0S8#@"
             cellSize={18}

@@ -43,7 +43,7 @@ npm run preview  # serve the production build
 - **Fonts are self-hosted** in `src/fonts` (woff2, latin subset; hashed by Vite) so the site
   makes no third-party font requests and text does not reflow.
 - **Grainient backdrops.** The hero, impact, experience and contact sections
-  each mount a `Grainient` WebGL2 shader (`#97f8f4 → #119cff → #0a66c2`,
+  each mount a `Grainient` WebGL2 shader (`#119cff → #0a66c2` blues only,
   re-angled per section). Every host keeps a layered CSS
   gradient underneath as the no-WebGL fallback, and sections below the fold only
   mount their shader when they approach the viewport.
@@ -52,7 +52,11 @@ npm run preview  # serve the production build
   switch is turned on; the choice is stored in `localStorage` and the switch
   reports state through `aria-pressed`.
 - **Brand tokens — four colours, nothing else.** Cobalt `#0a66c2`, sky
-  `#119cff`, aqua `#97f8f4`, white. Cobalt is the only dark in the palette, so
+  `#119cff`, gold `#FFE873`, white. Gold is a **small-area accent only**: labels,
+  rules, hover states and buttons. It is never used as a section fill and never
+  as text on white (1.23:1), which is why the services section is white rather
+  than the old full-bleed accent. Gold on cobalt measures 4.62:1, so the small
+  uppercase labels still clear WCAG AA. Cobalt is the only dark in the palette, so
   it carries all body text and every dark section. `#119cff` is too light for
   small type on any background (1.96–2.91:1), so it stays an accent: borders,
   decorative marks, and oversized display type. Verified with a WCAG audit of
