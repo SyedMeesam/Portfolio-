@@ -43,20 +43,24 @@ npm run preview  # serve the production build
 - **Fonts are self-hosted** in `src/fonts` (woff2, latin subset; hashed by Vite) so the site
   makes no third-party font requests and text does not reflow.
 - **Grainient backdrops.** The hero, impact, experience and contact sections
-  each mount a `Grainient` WebGL2 shader (`#119cff → #0a66c2` blues only,
-  re-angled per section). Every host keeps a layered CSS
+  each mount a `Grainient` WebGL2 shader (`#0a66c2 → #0A0A0A` for the black sections,
+  blue-only for the cobalt ones, re-angled per section). Every host keeps a layered CSS
   gradient underneath as the no-WebGL fallback, and sections below the fold only
   mount their shader when they approach the viewport.
 - **Interface sound is opt-in.** Recipes from the React Bits Sound Lab are
   synthesised in the browser (no audio files). Nothing plays until the header
   switch is turned on; the choice is stored in `localStorage` and the switch
   reports state through `aria-pressed`.
-- **Brand tokens — four colours, nothing else.** Cobalt `#0a66c2`, sky
-  `#119cff`, gold `#FFE873`, white. Gold is a **small-area accent only**: labels,
-  rules, hover states and buttons. It is never used as a section fill and never
-  as text on white (1.23:1), which is why the services section is white rather
-  than the old full-bleed accent. Gold on cobalt measures 4.62:1, so the small
-  uppercase labels still clear WCAG AA. Cobalt is the only dark in the palette, so
+- **Brand tokens — five colours, nothing else.** Near-black `#0A0A0A`, cobalt
+  `#0a66c2`, sky `#119cff`, gold `#FFE873`, white.
+  - **Near-black** carries the header, hero, experience and contact sections.
+  - **Gold** is used two ways: as a **full section ground with black type**
+    (services, ticker) where black on gold is 16.07:1, and as a **text/border
+    accent on black** where gold on black is also 16.07:1.
+  - **Gold is never used as text on white** (1.23:1) or on cobalt (4.62:1, which
+    reads muddy at small sizes). It is always either the ground or on black.
+  - **Cobalt** stays the brand blue for the work/impact section and for small
+    text on white (5.69:1). Cobalt is the only dark in the palette, so
   it carries all body text and every dark section. `#119cff` is too light for
   small type on any background (1.96–2.91:1), so it stays an accent: borders,
   decorative marks, and oversized display type. Verified with a WCAG audit of

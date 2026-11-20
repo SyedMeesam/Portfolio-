@@ -111,7 +111,7 @@ export function mountReactBits() {
   // Grainient shader backdrops, one per section. Each host keeps a layered CSS
   // gradient underneath, so the design holds up without WebGL2. Sections that
   // are far down the page only mount their shader as they come into view.
-  const HERO_BACKDROP = { colors: ['#119cff', '#119cff', '#0a66c2', '#0a66c2', '#0a66c2'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08, speed: 0.3 };
+  const HERO_BACKDROP = { colors: ['#0A0A0A', '#0A0A0A', '#0a66c2', '#0a66c2', '#0A0A0A'], angle: 55, flow: 0.8, silk: 0.35, grainAmount: 0.08, speed: 0.3 };
   // Every host here is a live WebGL canvas, but only the ones in view actually
   // paint: Grainient stops its loop when it leaves the viewport or the tab is
   // hidden. The speeds are deliberately slow - a fast-moving field behind body
@@ -120,8 +120,8 @@ export function mountReactBits() {
     ['#header-grainient', HERO_BACKDROP],
     ['#hero-grainient', HERO_BACKDROP],
     ['#impact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#119cff', '#0a66c2'], angle: 145, flow: 0.8, silk: 0.3, grainAmount: 0.06, speed: 0.28 }],
-    ['#experience-grainient', { colors: ['#119cff', '#119cff', '#0a66c2', '#119cff', '#119cff'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.22 }],
-    ['#contact-grainient', { colors: ['#0a66c2', '#119cff', '#0a66c2', '#119cff', '#0a66c2'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.26 }]
+    ['#experience-grainient', { colors: ['#0A0A0A', '#0a66c2', '#0A0A0A', '#0a66c2', '#0A0A0A'], angle: 250, flow: 0.65, silk: 0.55, grainAmount: 0.05, speed: 0.22 }],
+    ['#contact-grainient', { colors: ['#0A0A0A', '#0a66c2', '#0A0A0A', '#0A0A0A', '#0A0A0A'], angle: 200, flow: 0.6, silk: 0.5, grainAmount: 0.05, scale: 1.6, speed: 0.26 }]
   ];
   const mountBackdrop = async ([selector, props]) => {
     const host = document.querySelector(selector);
