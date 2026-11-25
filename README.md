@@ -39,18 +39,18 @@ npm run preview  # serve the production build
   makes no third-party font requests and text does not reflow.
 
 
-- **Brand tokens — five colours, nothing else.** Near-black `#0A0A0A`, cobalt
-  `#0a66c2`, sky `#119cff`, gold `#FFE873`, white.
-  - **Near-black** carries the hero, experience and contact sections.
-  - **Gold** is used two ways: as a **full section ground with black type**
-    (services, ticker) where black on gold is 16.07:1, and as a **text/border
-    accent on black** where gold on black is also 16.07:1.
-  - **Gold is never used as text on white** (1.23:1) or on cobalt (4.62:1, which
-    reads muddy at small sizes). It is always either the ground or on black.
-  - **Cobalt** stays the brand blue for the work/impact section and for small
-    text on white (5.69:1).
-  - **Sky** is too light for small type on any background (1.96–2.91:1), so it
-    stays an accent: borders, rules, decorative marks, and oversized display type.
+- **Brand tokens — four colours, nothing else.** Near-black `#0A0A0A`, cobalt
+  `#0a66c2`, sky `#119cff`, white `#FFFFFF`.
+  - **Near-black** carries the hero, experience, contact and footer.
+  - **Cobalt** is the brand blue: the services and ticker grounds, the
+    work/impact section, and small text on white (5.69:1).
+  - **Sky** is the accent: rules, borders, decorative marks, hover states, and
+    display type on black (6.81:1).
+  - **Grounds carry white type.** Cobalt carries white (5.69:1); black carries
+    white (19.8:1); white carries cobalt (5.69:1).
+  - **Sky is never type on white (2.91:1) or on cobalt (1.96:1), and never a
+    ground for type.** Black on cobalt is 3.48:1 — large type only — so no small
+    text is ever black on cobalt.
   - Verified with a WCAG audit of every pairing the stylesheet sets.
 
 ## Deployment
