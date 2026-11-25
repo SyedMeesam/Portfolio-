@@ -1,3 +1,7 @@
 node_modules/
 dist/
 .DS_Store
+
+# Local test artifacts
+.mt.css
+.mt.cjs
