@@ -149,6 +149,8 @@
 /* Typography polish: balanced headlines, no orphan words in intro copy. */
 .hero-intro p, .cases-heading p, .results-note, .case-note{text-wrap:pretty}
 .hero h1, .section-title h2, .services h2, .experience h2, .contact h2{text-wrap:balance}
+/* The rotating word must never be re-wrapped mid-transition. */
+.hero h1 .rotator{text-wrap:nowrap}
 
 .hero{position:relative;overflow:hidden;isolation:isolate;background:#0A0A0A}
 
@@ -251,3 +253,59 @@ footer{border-color:rgba(17,156,255,.35)}
 
 /* The portrait frame must not hide the cut-out portrait behind a fill. */
 .hero-image-frame{background:transparent}
+
+/* ---------------------------------------------------------------------------
+   Hero heading word rotator.
+   Stacks the words on one baseline; only one is ever visible, so the line
+   never reflows and the layout never jumps. The .is-leaving copy is an exact
+   clone layered on top, which lets both run their own transition at once.
+   --------------------------------------------------------------------------- */
+.rotator{
+  position:relative;
+  display:inline-grid;
+  vertical-align:bottom;
+  /* Clips the travelling words, but padded so descenders and the optical
+     overshoot of a 200px cap-height are never shaved off. */
+  overflow:hidden;
+  padding:.06em .02em .1em;
+  /* Every word is scaled to occupy the same width as the longest one, so the
+     line never reflows and the full stop never appears to drift. */
+  justify-items:stretch;
+}
+.rotator__word{
+  grid-area:1/1;
+  display:block;
+  white-space:nowrap;
+  opacity:0;
+  transform:translateY(.55em);
+  transition:opacity .32s ease,transform .42s cubic-bezier(.22,.61,.36,1);
+  will-change:opacity,transform;
+}
+.rotator__word.is-active{opacity:1;transform:translateY(0)}
+/* Every word keeps the same size. Optical-scaling the shorter ones to a
+   common width made the cap height swing 37% between words, which reads as
+   the heading resizing itself. A wider right edge on longer words is the
+   honest, quieter result: the full stop always hugs its own word. */
+.rotator__word.is-leaving{
+  opacity:0;
+  transform:translateY(-.55em);
+  transition:opacity .24s ease,transform .32s cubic-bezier(.4,0,.7,.4);
+}
+/* No JS: show the first word and leave it alone. */
+.no-js .rotator__word{opacity:0;transform:none}
+.no-js .rotator__word:first-child{opacity:1}
+
+/* Contact lead: the longer closing paragraph needs its own rhythm so it does
+   not inherit the 10px letterspaced eyebrow styling. */
+.contact-lead{
+  font-size:15px;
+  line-height:1.65;
+  letter-spacing:0;
+  color:#119cff;
+  max-width:520px;
+  margin:28px auto 0;
+  text-wrap:pretty;
+}
+@media(max-width:800px){
+  .contact-lead{font-size:14px;max-width:420px;margin-top:22px}
+}

@@ -50,3 +50,54 @@ document.querySelectorAll('.case-image img').forEach(image => {
   image.addEventListener('error', showFallback);
   if (image.complete && image.naturalWidth === 0) showFallback();
 });
+
+// Hero heading rotator. The markup already shows the first word (with its
+// full stop), so with JS off or reduced motion on, nothing moves.
+const rotator = document.querySelector('.rotator');
+if (rotator) {
+  const words = Array.from(rotator.querySelectorAll('.rotator__word'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (words.length > 1 && !reduceMotion.matches) {
+    let index = 0;
+    let timer = null;
+
+    const advance = () => {
+      const current = words[index];
+      index = (index + 1) % words.length;
+      const next = words[index];
+
+      // Clone the outgoing word so its exit transition can overlap the
+      // incoming one instead of being cancelled by it.
+      const ghost = current.cloneNode(true);
+      ghost.classList.remove('is-active');
+      ghost.classList.add('is-leaving');
+      ghost.setAttribute('aria-hidden', 'true');
+      rotator.append(ghost);
+      current.classList.remove('is-active');
+
+      const removeGhost = () => ghost.remove();
+      ghost.addEventListener('transitionend', removeGhost, { once: true });
+      window.setTimeout(removeGhost, 700);
+
+      next.classList.add('is-active');
+    };
+
+    const start = () => { if (!timer) timer = window.setInterval(advance, 2600); };
+    const stop = () => { window.clearInterval(timer); timer = null; };
+
+    start();
+    // Do not burn frames rotating words nobody is looking at.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else if (!reduceMotion.matches) start();
+    });
+    reduceMotion.addEventListener('change', event => {
+      if (event.matches) {
+        stop();
+        rotator.querySelectorAll('.rotator__word.is-leaving').forEach(ghost => ghost.remove());
+        words.forEach(word => word.classList.remove('is-active'));
+        words[0].classList.add('is-active');
+      } else start();
+    });
+  }
+}
